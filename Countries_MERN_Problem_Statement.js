@@ -57,7 +57,7 @@ Axios             Handle frontend<-->backend communication
 ---------------------------------------------------------------------------
 >>API
           
-Segment   Method   URI                              Login required?
+Segment   Method   URI                                  Login required?
 -----------------------------------------------------------------------
 Auth
           POST     /api/auth/signup                     false

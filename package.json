@@ -7,7 +7,7 @@
   "description": "Server countries-MERN requests",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "Geoffrey Siele (sielekrisp@gmail.com)",
   "license": "ISC",
