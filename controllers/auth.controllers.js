@@ -1,16 +1,16 @@
-require('mongoose'); // Ensure mongoose is in scope
+require('mongoose'); // Ensure mongoose is in scope.
 
-const bcrypt = require('bcrypt'); // For encrypting password
-const jwt = require('jsonwebtoken'); // For signing token
+const bcrypt = require('bcrypt'); // For encrypting password.
+const jwt = require('jsonwebtoken'); // For signing token.
 
-const User = require('../models/user.model'); // User model
+const User = require('../models/user.model'); // User model.
 
 // Abstract away all auth controller functions 
 // with a single object, AuthControllers.
 // This enables "dependency injection" wherever needed.
 const AuthControllers = {};
 
-// POST /api/auth/signup --> Create a user
+// POST /api/auth/signup --> Create a user.
 AuthControllers.createUser = (req, res, next) => {
   console.log('\ncreateUser invoked...');
   
@@ -22,14 +22,10 @@ AuthControllers.createUser = (req, res, next) => {
         return res.status(409).json({
           message: `Email already taken! If it's yours, please
           login or reset your password if you forgot it.
-          Otherwise signup with a new email address.`,
-          login_here: 'http://localhost:4001/api/auth/login',
-          all_notes: `http://localhost:4001/api/notes`,
-          all_users: `http://localhost:4001/api/users`,
-          endpoints: `http://localhost:4001/api/endpoints`
+          Otherwise signup with a new email address.`
         })
       } else {
-        // Hash password with 10 salting rounds
+        // Hash password with 10 salting rounds.
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           if (err) {
             return res.status(500).json({ error: err });
@@ -44,11 +40,7 @@ AuthControllers.createUser = (req, res, next) => {
               .save()
               .then(result => {
                 return res.status(201).json({
-                  message: 'User created & saved successfully.',
-                  login_here: 'http://localhost:4001/api/auth/login',
-                  all_notes: `http://localhost:4001/api/notes`,
-                  all_users: `http://localhost:4001/api/users`,
-                  endpoints: `http://localhost:4001/api/endpoints`
+                  message: 'User created & saved successfully.'
                 });
               })
               .catch(err => {
@@ -71,25 +63,14 @@ AuthControllers.loginUser = (req, res, next) => {
     .then(user => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: 'Login failed! Check your password or email.',
-          try_again: 'http://localhost:4001/api/auth/login',
-          sign_up: 'http://localhost:4001/api/auth/signup',
-          go_home: 'http://localhost:4001',
-          all_notes: `http://localhost:4001/api/notes`,
-          all_users: `http://localhost:4001/api/users`,
-          endpoints: `http://localhost:4001/api/endpoints`
+          message: 'Login failed! Check your password or email.'
         });
       }
 
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           return res.status(401).json({ 
-            message: 'Login failed! Check your password or email.',
-            try_again: 'http://localhost:4001/api/auth/login',
-            go_home: 'http://localhost:4001',
-            all_notes: `http://localhost:4001/api/notes`,
-            all_users: `http://localhost:4001/api/users`,
-            endpoints: `http://localhost:4001/api/endpoints`
+            message: 'Login failed! Check your password or email.'
           });
         }
         if (result) {
@@ -106,24 +87,11 @@ AuthControllers.loginUser = (req, res, next) => {
           );
           return res.status(200).json({
             message: 'Login successful.',
-            bearerToken: token,
-            more_links: {
-              my_notes: `http://localhost:4001/api/notes/${user[0].username}`,
-              all_notes: `http://localhost:4001/api/notes`,
-              my_page: `http://localhost:4001/api/users/${user[0].username}`,
-              all_users: `http://localhost:4001/api/users`,
-              go_home: 'http://localhost:4001',
-              endpoints: `http://localhost:4001/api/endpoints`
-            }
+            bearerToken: token
           });
         }
         return res.status(401).json({
-          message: 'Login failed! Check your password or email.',
-          try_again: 'http://localhost:4001/api/auth/login',
-          go_home: 'http://localhost:4001',
-          all_notes: `http://localhost:4001/api/notes`,
-          all_users: `http://localhost:4001/api/users`,
-          endpoints: `http://localhost:4001/api/endpoints`
+          message: 'Login failed! Check your password or email.'
         });
       })
     })
@@ -131,13 +99,7 @@ AuthControllers.loginUser = (req, res, next) => {
       console.log(err);
       return res.status(500).json({ 
         error: err,
-        message: 'Login failed! Check your password or email.',
-        try_again: 'http://localhost:4001/api/auth/login',
-        sign_up: 'http://localhost:4001/api/auth/signup',
-        go_home: 'http://localhost:4001',
-        all_notes: `http://localhost:4001/api/notes`,
-        all_users: `http://localhost:4001/api/users`,
-        endpoints: `http://localhost:4001/api/endpoints`
+        message: 'Login failed! Check your password or email.'
       });
     })
 } // loginUser
@@ -157,11 +119,11 @@ module.exports = AuthControllers;
 
 // AuthControllers routes & handler functions
 
-Method  routes             Function       Purpose
+Method  routes              Function       Purpose
 
-POST    /api/auth/signup   createUser     Create a user 
-POST    /api/auth/login    loginUser      Log user in
-POST    /api/auth/logout   logoutUser     Log user out
+POST    /api/auth/signup    createUser     Create a user 
+POST    /api/auth/login     loginUser      Log user in
+POST    /api/auth/logout    logoutUser     Log user out
 
 */
 
