@@ -21,7 +21,7 @@ const PORT          = process.env.PORT || 4001;
 
 // Set up db options
 mongoose.Promise = global.Promise;
-const dbURI = process.env.ATLAS;
+const dbURI = process.env.DB_URI;
 const dbOPTIONS = {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -49,8 +49,8 @@ app.use(logger('tiny'));
 app.use('/api/notes', notesRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
-/* 
 
+/* 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
