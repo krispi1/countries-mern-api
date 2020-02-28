@@ -46,10 +46,10 @@ UserControllers.fetchSingleUser = (req, res, next) => {
 
   User
     .find({ username: req.params.username })
-    .select('_id username notes')
+    .select('_id username')
     .exec()
     .then(user => {
-      return user[0] === undefined ? (
+      return (!user[0]) ? (
         // The username supplied is invalid or user not found
         res.status(500).json({
           message: 'Invalid user!!',
@@ -61,8 +61,7 @@ UserControllers.fetchSingleUser = (req, res, next) => {
       ) : (
         // Successful user retrieval response
         res.status(200).json({ 
-          _id: user[0]._id,
-          username: user[0].username,
+          user,
           more_links: {
             user_notes: `http://localhost:4001/api/notes/${user[0].username}`,
             all_notes: `http://localhost:4001/api/notes`,
